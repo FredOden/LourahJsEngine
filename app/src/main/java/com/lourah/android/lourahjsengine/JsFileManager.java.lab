@@ -1,0 +1,26 @@
+public static void saveFile(Context context, String fileName, String text, String extension) throws IOException{
+    OutputStream outputStream;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+        ContentValues values = new ContentValues();
+
+        values.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName + extension);   // file name
+        values.put(MediaStore.MediaColumns.MIME_TYPE, "text/plain");
+        values.put(MediaStore.MediaColumns.RELATIVE_PATH, DIRECTORY);
+
+        Uri extVolumeUri = MediaStore.Files.getContentUri("external");
+        Uri fileUri = context.getContentResolver().insert(extVolumeUri, values);
+
+        outputStream = context.getContentResolver().openOutputStream(fileUri);
+    }
+    else {
+        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString() + FOLDER_NAME;
+        File file = new File(path, fileName + extension);
+        Log.d(TAG, "saveFile: file path - " + file.getAbsolutePath());
+        outputStream = new FileOutputStream(file);
+    }
+
+    byte[] bytes = text.getBytes();
+    outputStream.write(bytes);
+    outputStream.close();
+}
