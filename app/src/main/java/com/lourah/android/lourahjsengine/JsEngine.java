@@ -113,7 +113,7 @@ public class JsEngine
                       // Encapsulate index.js in asset Lourah/JsEngine/starter.js
                       HashMap<String, String> starterMacros = new HashMap<>();
                       starterMacros.put("@@@RHINO_VERSION@@@", "1.7.13");
-                      starterMacros.put("@@@GENERATED@@@", "20201219");
+                      starterMacros.put("@@@GENERATED@@@", "20231207");
                       starterMacros.put("@@@JS_APP_NAME@@@", ((Button)view).getText().toString());
                       //starterMacros.put("@@@EXTERNAL_STORAGE_DIRECTORY@@@", Environment.getExternalStorageDirectory().toString());
                       starterMacros.put("@@@EXTERNAL_STORAGE_DIRECTORY@@@", getRootDir().toString());
