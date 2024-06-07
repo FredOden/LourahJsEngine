@@ -83,8 +83,8 @@ public class JsEngine
     tv = new TextView(this);
         tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-    //File fJsEngine = new File(Environment.getExternalStorageDirectory().toString() + "/LourahJsEngine");
-    File fJsEngine = new File(getRootDir().toString() + "/LourahJsEngine");
+    //File fJsEngine = new File(Environment.getExternalStorageDirectory().toString() + "/LourahJs");
+    File fJsEngine = new File(getRootDir().toString() + "/LourahJs");
     File[] files = fJsEngine.listFiles();
     try {
       for(File file : files) {
@@ -103,7 +103,7 @@ public class JsEngine
                   public void onClick(View view) {
                     //String indexPath = Environment.getExternalStorageDirectory()
                     String indexPath = getRootDir()
-                            + "/LourahJsEngine"
+                            + "/LourahJs"
                             + "/"
                             + ((Button) view).getText()
                             + "/"
@@ -112,13 +112,13 @@ public class JsEngine
                     try {
                       // Encapsulate index.js in asset Lourah/JsEngine/starter.js
                       HashMap<String, String> starterMacros = new HashMap<>();
-                      starterMacros.put("@@@RHINO_VERSION@@@", "1.7.13");
-                      starterMacros.put("@@@GENERATED@@@", "20231207");
+                      starterMacros.put("@@@RHINO_VERSION@@@", "1.7.15");
+                      starterMacros.put("@@@GENERATED@@@", "20240607");
                       starterMacros.put("@@@JS_APP_NAME@@@", ((Button)view).getText().toString());
                       //starterMacros.put("@@@EXTERNAL_STORAGE_DIRECTORY@@@", Environment.getExternalStorageDirectory().toString());
                       starterMacros.put("@@@EXTERNAL_STORAGE_DIRECTORY@@@", getRootDir().toString());
                       // jsFrameworkDirectory to be configurable in a future version ?
-                      starterMacros.put("@@@JS_FRAMEWORK_DIRECTORY@@@", "LourahJsEngine");
+                      starterMacros.put("@@@JS_FRAMEWORK_DIRECTORY@@@", "LourahJs");
                       String script = path2String(indexPath);
                       starterMacros.put("@@@SCRIPT@@@", script);
                       String starter = asset2String("Lourah/JsEngine/starter.js");
