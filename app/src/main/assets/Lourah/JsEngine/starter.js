@@ -52,5 +52,15 @@
   androidOnHandler[onEvent] = fHandler
  };
  })();
+ 
+ var console = {
+    log : (txt) => android.util.Log.v(java.lang.String("LourahJsEngine__@@@JS_APP_NAME@@@"), java.lang.String(txt)),
+    debug : (txt) => android.util.Log.d(java.lang.String("LourahJsEngine__@@@JS_APP_NAME@@@"), java.lang.String(txt)),
+    error : (txt) => android.util.Log.e(java.lang.String("LourahJsEngine__@@@JS_APP_NAME@@@"), java.lang.String(txt)),
+    warning : (txt) => android.util.Log.w(java.lang.String("LourahJsEngine__@@@JS_APP_NAME@@@"), java.lang.String(txt)),
+    info : (txt) => android.util.Log.i(java.lang.String("LourahJsEngine__@@@JS_APP_NAME@@@"), java.lang.String(txt)),
+    wtf : (txt) => android.util.Log.wtf(java.lang.String("LourahJsEngine__@@@JS_APP_NAME@@@"), java.lang.String(txt))
+    };
+    
  @@@SCRIPT@@@
  })();

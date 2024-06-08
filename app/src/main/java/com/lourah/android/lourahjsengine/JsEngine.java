@@ -32,6 +32,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+//import com.google.android.material.snackbar.Snackbar;
 
 /**
  * The encapsulating Android activity for the possibles javascript applications
@@ -115,7 +116,8 @@ public class JsEngine
                       starterMacros.put("@@@RHINO_VERSION@@@", "1.7.15");
                       starterMacros.put("@@@GENERATED@@@", "20240607");
                       starterMacros.put("@@@JS_APP_NAME@@@", ((Button)view).getText().toString());
-                      //starterMacros.put("@@@EXTERNAL_STORAGE_DIRECTORY@@@", Environment.getExternalStorageDirectory().toString());
+                      //starterMacros.put("@@@INTERNAL_STORAGE_DIRECTORY@@@", Environment.getExternalStorageDirectory().toString());
+                      starterMacros.put("@@@INTERNAL_STORAGE_DIRECTORY@@@", getFilesDir().toString());
                       starterMacros.put("@@@EXTERNAL_STORAGE_DIRECTORY@@@", getRootDir().toString());
                       // jsFrameworkDirectory to be configurable in a future version ?
                       starterMacros.put("@@@JS_FRAMEWORK_DIRECTORY@@@", "LourahJs");
@@ -123,9 +125,11 @@ public class JsEngine
                       starterMacros.put("@@@SCRIPT@@@", script);
                       String starter = asset2String("Lourah/JsEngine/starter.js");
                       for(String k : starterMacros.keySet()) {
+                                            // Debugging Macros
+                                            if (!k.equals("@@@SCRIPT@@@")) tv.append(k + "::" + starterMacros.get(k) + "\n");
                         starter = starter.replace(k, starterMacros.get(k));
                       }
-		      tv.append(indexPath+"::"+script);
+		      // was for debugging purpose :tv.append(indexPath+"::"+script);
                       Js.JsObject o =
                               js.eval(starter, indexPath);
                       if(!o.ok) {
@@ -374,7 +378,7 @@ if (false && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.
   
   @Override
   public void onBackPressed() {
-    String script = "Lourah.jsEngine.onBackPressed();";
+    String script = "Lourah.jsFramework.onBackPressed();";
     Js.JsObject o =
            js.eval(script, "JsEngine.java");
            if(!o.ok) {
