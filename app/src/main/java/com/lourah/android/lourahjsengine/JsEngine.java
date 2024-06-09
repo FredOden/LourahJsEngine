@@ -32,6 +32,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.net.*;
 //import com.google.android.material.snackbar.Snackbar;
 
 /**
@@ -116,8 +117,8 @@ public class JsEngine
                       starterMacros.put("@@@RHINO_VERSION@@@", "1.7.15");
                       starterMacros.put("@@@GENERATED@@@", "20240607");
                       starterMacros.put("@@@JS_APP_NAME@@@", ((Button)view).getText().toString());
-                      //starterMacros.put("@@@INTERNAL_STORAGE_DIRECTORY@@@", Environment.getExternalStorageDirectory().toString());
-                      starterMacros.put("@@@INTERNAL_STORAGE_DIRECTORY@@@", getFilesDir().toString());
+                      starterMacros.put("@@@INTERNAL_STORAGE_DIRECTORY@@@", getExternalFilesDir("LourahJsEngine" /* Environment.getDataDirectory().getAbsolutePath() */).getAbsolutePath().toString());
+                      //starterMacros.put("@@@INTERNAL_STORAGE_DIRECTORY@@@", getFilesDir().toString());
                       starterMacros.put("@@@EXTERNAL_STORAGE_DIRECTORY@@@", getRootDir().toString());
                       // jsFrameworkDirectory to be configurable in a future version ?
                       starterMacros.put("@@@JS_FRAMEWORK_DIRECTORY@@@", "LourahJs");
@@ -291,8 +292,11 @@ if (false && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.
    */
   public String path2String(String path) {
     try {
-      File f = new File(path);
-      return inputStream2String(new FileInputStream(f));
+      //File f = new File(path);
+      //return inputStream2String(new FileInputStream(f))
+            URI uri = URI.create(path);
+            if (uri.getScheme() == null) uri = URI.create("file://" + path);
+            return inputStream2String(uri.toURL().openStream());
     } catch (IOException ioe) {
       return ioe.getMessage();
     }

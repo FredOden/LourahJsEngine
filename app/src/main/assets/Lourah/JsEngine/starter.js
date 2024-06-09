@@ -9,12 +9,14 @@
   this.getGenerated = () => '@@@GENERATED@@@';
   this.name = () => '@@@JS_APP_NAME@@@';
   this.root = () => '@@@EXTERNAL_STORAGE_DIRECTORY@@@';
+  this.internalDir = () => '@@@INTERNAL_STORAGE_DIRECTORY@@@';
   this.parentDir = () => (
      this.root() + '/@@@JS_FRAMEWORK_DIRECTORY@@@'
      );
   this.dir = () => (
      this.parentDir() + '/' + this.name()
      );
+     this.localDir = () => (this.internalDir() + '/' + this.name());
   this.mainThread = function(f){
     mainHandler.post(new java.lang.Runnable({
      run: f
@@ -53,6 +55,14 @@
  };
  })();
  
+ // Create the localDir
+ (function () {
+    var local = new java.io.File(Lourah.jsFramework.localDir());
+    if (!(local.mkdir() || local.isDirectory())) {
+        throw "starter.js::LocalDir::" + local.getPath() + "::was NOT created";
+        }
+    })();
+ 
  var console = {
     log : (txt) => android.util.Log.v(java.lang.String("LourahJsEngine__@@@JS_APP_NAME@@@"), java.lang.String(txt)),
     debug : (txt) => android.util.Log.d(java.lang.String("LourahJsEngine__@@@JS_APP_NAME@@@"), java.lang.String(txt)),
@@ -61,6 +71,7 @@
     info : (txt) => android.util.Log.i(java.lang.String("LourahJsEngine__@@@JS_APP_NAME@@@"), java.lang.String(txt)),
     wtf : (txt) => android.util.Log.wtf(java.lang.String("LourahJsEngine__@@@JS_APP_NAME@@@"), java.lang.String(txt))
     };
+   
     
  @@@SCRIPT@@@
  })();
