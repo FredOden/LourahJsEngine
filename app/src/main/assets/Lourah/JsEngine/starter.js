@@ -16,7 +16,7 @@
   this.dir = () => (
      this.parentDir() + '/' + this.name()
      );
-     this.localDir = () => (this.internalDir() + '/' + this.name());
+  this.localDir = () => (this.internalDir() + '/' + this.name());
   this.mainThread = function(f){
     mainHandler.post(new java.lang.Runnable({
      run: f
@@ -62,6 +62,9 @@
         throw "starter.js::LocalDir::" + local.getPath() + "::was NOT created";
         }
     })();
+
+ /**/
+ 
  
  var console = {
     log : (txt) => android.util.Log.v(java.lang.String("LourahJsEngine__@@@JS_APP_NAME@@@"), java.lang.String(txt)),
@@ -71,7 +74,7 @@
     info : (txt) => android.util.Log.i(java.lang.String("LourahJsEngine__@@@JS_APP_NAME@@@"), java.lang.String(txt)),
     wtf : (txt) => android.util.Log.wtf(java.lang.String("LourahJsEngine__@@@JS_APP_NAME@@@"), java.lang.String(txt))
     };
-   
-    
- @@@SCRIPT@@@
+/**/   
+
+     Activity.importScript('@@@INDEX_PATH@@@');
  })();

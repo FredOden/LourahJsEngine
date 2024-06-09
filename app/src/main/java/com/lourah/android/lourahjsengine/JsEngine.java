@@ -30,9 +30,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 //import com.google.android.material.snackbar.Snackbar;
 
 /**
@@ -122,6 +124,7 @@ public class JsEngine
                       starterMacros.put("@@@EXTERNAL_STORAGE_DIRECTORY@@@", getRootDir().toString());
                       // jsFrameworkDirectory to be configurable in a future version ?
                       starterMacros.put("@@@JS_FRAMEWORK_DIRECTORY@@@", "LourahJs");
+                                        starterMacros.put("@@@INDEX_PATH@@@", indexPath);
                       String script = path2String(indexPath);
                       starterMacros.put("@@@SCRIPT@@@", script);
                       String starter = asset2String("Lourah/JsEngine/starter.js");
@@ -130,7 +133,7 @@ public class JsEngine
                                             if (!k.equals("@@@SCRIPT@@@")) tv.append(k + "::" + starterMacros.get(k) + "\n");
                         starter = starter.replace(k, starterMacros.get(k));
                       }
-		      // was for debugging purpose :tv.append(indexPath+"::"+script);
+                      //tv.append(indexPath+"::<<<\n"+starter + "\n>>>");
                       Js.JsObject o =
                               js.eval(starter, indexPath);
                       if(!o.ok) {
@@ -285,7 +288,7 @@ if (false && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.
      return ret;
   }
 
-  /**
+  /** 
    * read source code from external storage file
    * @param path  of the file
    * @return full source code content
@@ -293,9 +296,10 @@ if (false && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.
   public String path2String(String path) {
     try {
       //File f = new File(path);
-      //return inputStream2String(new FileInputStream(f))
-            URI uri = URI.create(path);
-            if (uri.getScheme() == null) uri = URI.create("file://" + path);
+      //return inputStream2String(new FileInputStream(f));
+            String ePath = path.replaceAll(" ", "%20"); //URLEncoder.encode(path, StandardCharsets.UTF_8.toString());
+            URI uri = URI.create(ePath);
+            if (uri.getScheme() == null) uri = URI.create("file://" + ePath);
             return inputStream2String(uri.toURL().openStream());
     } catch (IOException ioe) {
       return ioe.getMessage();
