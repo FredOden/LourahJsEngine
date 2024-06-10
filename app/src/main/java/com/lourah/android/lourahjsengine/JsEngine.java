@@ -294,15 +294,51 @@ if (false && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.
    * @return full source code content
    */
   public String path2String(String path) {
+    String ePath = path.replaceAll(" ", "%20");
     try {
       //File f = new File(path);
       //return inputStream2String(new FileInputStream(f));
-            String ePath = path.replaceAll(" ", "%20"); //URLEncoder.encode(path, StandardCharsets.UTF_8.toString());
+            //String ePath = URLEncoder.encode(path.replaceAll(" ", "%20"), StandardCharsets.UTF_8.toString());
             URI uri = URI.create(ePath);
             if (uri.getScheme() == null) uri = URI.create("file://" + ePath);
-            return inputStream2String(uri.toURL().openStream());
+            if (uri.getScheme().equals("file")) {
+                return inputStream2String(uri.toURL().openStream());
+                }
+            // Asynchronous call on network
+            class Cb implements Runnable {
+                private volatile String s;
+                private volatile boolean bSuccess;
+                private volatile IOException ioException;
+                private volatile URL url;
+                @Override
+                public void run () {
+                    try {
+                        s = inputStream2String(url.openStream());
+                        bSuccess = true;
+                    } catch (IOException ioe) {
+                        bSuccess = false;
+                        ioException = new IOException(new String("Error::" + ePath + "::" + ioe.getMessage()));
+                    }
+                }
+                public String getContent() throws IOException {
+                    if (!bSuccess) throw ioException;
+                    return s;
+                }
+                
+                public void setURL(URL u) {
+                    url = u;
+                }
+            }
+            Cb cb = new Cb();
+            cb.setURL(uri.toURL());
+            Thread t = new Thread(cb);
+            t.start();
+            t.join();
+            return cb.getContent();
     } catch (IOException ioe) {
-      return ioe.getMessage();
+      return "path2String" + ePath + "::" + ioe.getMessage();
+    } catch (InterruptedException ie) {
+        return "path2String::" + ePath + "::" + ie.getMessage();
     }
   }
 
